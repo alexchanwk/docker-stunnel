@@ -1,5 +1,9 @@
 # Build from source
 FROM ubuntu:18.04 AS maker
+
+ARG OPENSSL_URL
+ARG STUNNEL_URL
+
 RUN apt-get update && \
     apt-get install -y wget build-essential libssl-dev && \
     mkdir /build && cd /build && mkdir deployables && \

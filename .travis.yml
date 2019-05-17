@@ -1,0 +1,18 @@
+sudo: required
+
+dist: trusty
+
+language: generic
+
+env:
+  - TAG=v5.54
+  - STUNNEL_URL=https://www.stunnel.org/downloads/stunnel-5.54.tar.gz
+  - OPENSSL_URL=https://www.openssl.org/source/openssl-1.1.1b.tar.gz
+
+stage: build image
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build --build-arg OPENSSL_URL=$OPENSSL_URL --build-arg STUNNEL_URL=$STUNNEL_URL -t docker-stunnel .
+  - docker tag docker-stunnel $DOCKER_ORGANIZATION/docker-stunnel:$TAG
+  - docker push $DOCKER_ORGANIZATION/docker-stunnel:$TAG
+  - docker run --rm --entrypoint "/bin/bash" $DOCKER_ORGANIZATION/docker-stunnel:$TAG -c "if [ -e /entrypoint.sh ]; then (exit 0); else (exit 1); fi"

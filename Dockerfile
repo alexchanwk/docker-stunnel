@@ -12,9 +12,9 @@ RUN apt-get update && \
     wget -q ${STUNNEL_URL} && \
     tar -xzf `basename ${STUNNEL_URL}` && rm `basename ${STUNNEL_URL}` && \
     apt-get remove -y openssl && \
-    cd `basename ${OPENSSL_URL}` && ./config && make && make DESTDIR=/build/deployables install && make install && cd - && \
+    cd `basename ${OPENSSL_URL} .tar.gz` && ./config && make && make DESTDIR=/build/deployables install && make install && cd - && \
     export LD_LIBRARY_PATH=/build/deployables/usr/local/lib && \
-    cd `basename ${STUNNEL_URL}` && ./configure && make && make install DESTDIR=/build/deployables && cd - && \
+    cd `basename ${STUNNEL_URL} .tar.gz` && ./configure && make && make install DESTDIR=/build/deployables && cd - && \
     cd deployables && tar -cf deployables.tar usr
 
 # Container image
